@@ -4,10 +4,11 @@ import handleValidationError from "../middlewares/handleValidationError.js";
 import checkCategoryBody from '../middlewares/category/checkCategoryBody.js';
 import checkCategoryQuery from '../middlewares/category/checkCategoryQuery.js';
 import checkCategoryParams from '../middlewares/category/checkCategoryParams.js';
+import { categoryValidation } from '../validators/index.js';
 
 const router = new Router();
 
-router.post('/',checkCategoryBody,categoryController.create)
+router.post('/',checkCategoryBody,categoryValidation, handleValidationError, categoryController.create)
 router.get('/',checkCategoryQuery,categoryController.getAll)
 router.get('/:id',checkCategoryParams,categoryController.getOne)
 router.delete('/:id',checkCategoryParams, categoryController.destroy)

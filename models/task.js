@@ -11,7 +11,6 @@ export default (sequelize, DataTypes) => {
         description: { type: DataTypes.STRING, allowNull: true },
         deadline_date:{type: DataTypes.DATE, allowNull:true},
         importance:{type: DataTypes.BOOLEAN, allowNull:true},
-
       },
       { freezeTableName: true }
     );

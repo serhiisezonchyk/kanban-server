@@ -1,5 +1,4 @@
 import db from '../models/index.js';
-import { getCategoryOwner } from './categoryController.js';
 import { getGroupOwner } from './groupController.js';
 
 const Task = db.task;
