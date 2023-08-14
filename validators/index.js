@@ -1,28 +1,34 @@
-import { body } from 'express-validator';
+import {z} from "zod"
+export const registerValidation = z.object({
+  email: z.string({required_error:'Email is required.'}).email('Invalid email.'),
+  password: z.string().min(6,'Password is shorter of 6 s.'),
+  second_password: z.string(),
+  first_name: z.string().min(1,'First name is required.'),
+  last_name: z.string().min(1,'Last name is required.'),
+  country: z.string().min(1,'Country is required.'),
+  phone: z.string().min(10,'Invalid phone'),
+}).refine((data)=>data.password === data.second_password,{
+  path:['second_password'],
+  message:'Passwords are diff',
+});
 
-export const registerValidation = [
-  body('email', 'Неправильний формат пошти.').isEmail(),
-  body('password', 'Пароль повинен бути мінімум 7 сімволів.').isLength({
-    min: 7,
-  }),
-  body('first_name', 'Введіть своє ім`я.').notEmpty(),
-  body('last_name', 'Введіть своє прізвище.').notEmpty(),
-  body('avatar_url', 'Неправильний формат URL аватару.').optional().isURL(),
-  body('country', 'Введіть свою країну.').notEmpty(),
-  body('phone', 'Введіть свій номер телефону.').notEmpty(),
-];
+export const groupValidation = z.object({
+  label: z.string({required_error: "Group name is required."}),
+});
 
-export const groupValidation = [
-  body('label', 'Введіть назву групи.').notEmpty(),
-];
 
-export const categoryValidation = [
-  body('label', 'Введіть назву колонки.').notEmpty(),
-];
+export const categoryValidation = z.object({
+  label: z.string({required_error:"Column name is required."})
+})
 
-export const taskValidation = [
-  body('title', 'Введіть назву задачі.').notEmpty(),
-  body('description', 'Неправильний формат опису.').optional().isString(),
-  body('deadline_date', 'Неправильний формат дати.').optional().isISO8601(),
-  body('importance', 'Неправильний формат важливості.').optional().isBoolean(),
-];
+export const taskValidation = z.object({
+  title: z.string({required_error:"Title is required"}),
+  description: z.string().optional(),
+  deadline_date: z.date().optional(),
+  importance: z.boolean().optional(),
+});
+
+
+
+
+

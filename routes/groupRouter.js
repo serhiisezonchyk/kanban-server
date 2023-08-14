@@ -8,7 +8,7 @@ import { groupValidation } from '../validators/index.js';
 
 const router = new Router();
 
-router.post('/',checkGroupBody,groupValidation,handleValidationError,groupController.create)
+router.post('/',checkGroupBody,handleValidationError(groupValidation),groupController.create)
 router.get('/',checkGroupQuery,groupController.getAll)
 router.get('/:id',checkGroupParams,groupController.getOne)
 router.delete('/:id',checkGroupParams, groupController.destroy)

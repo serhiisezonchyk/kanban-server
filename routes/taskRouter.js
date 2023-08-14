@@ -8,7 +8,7 @@ import { taskValidation } from '../validators/index.js';
 
 const router = new Router();
 
-router.post('/',checkTaskBody,taskValidation, handleValidationError, taskController.create)
+router.post('/',checkTaskBody, handleValidationError(taskValidation),taskController.create)
 router.get('/',checkTaskQuery,taskController.getAll)
 router.get('/:id',checkTaskParams,taskController.getOne)
 router.delete('/:id',checkTaskParams, taskController.destroy)

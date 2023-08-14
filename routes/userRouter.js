@@ -6,7 +6,7 @@ import handleValidationError from '../middlewares/handleValidationError.js';
 
 const router = new Router();
 
-router.post('/create',registerValidation, handleValidationError, userController.create);
+router.post('/create',handleValidationError(registerValidation), userController.create);
 router.post('/login',userController.login);
 router.get('/auth',authMiddleware, userController.check);
 
