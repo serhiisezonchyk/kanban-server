@@ -10,9 +10,10 @@ export default function (req, res, next) {
       return res.status(401).json({ message: 'No access' });
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-    if (decoded.id == req.query?.user_id) next();
-    else res.status(401).json({ message: ' No access' });
-    
+    if (decoded.id) {
+      req.user_id = decoded.id;
+      next();
+    } else res.status(401).json({ message: ' No access' });
   } catch (e) {
     res.status(401).json({ message: ' No access' });
   }

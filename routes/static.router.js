@@ -1,5 +1,5 @@
 import Router from "express"
-import * as staticController from "../controllers/staticController.js"
+import * as staticController from "../controllers/static.controller.js"
 
 const router = new Router();
 

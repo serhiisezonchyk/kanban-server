@@ -1,5 +1,5 @@
 import Router from "express"
-import * as categoryController from "../controllers/categoryController.js"
+import * as categoryController from "../controllers/category.controller.js"
 import handleValidationError from "../middlewares/handleValidationError.js";
 import checkCategoryBody from '../middlewares/category/checkCategoryBody.js';
 import checkCategoryQuery from '../middlewares/category/checkCategoryQuery.js';

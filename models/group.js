@@ -7,9 +7,16 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      label: { type: DataTypes.STRING, allowNull: false },
+      lable: { type: DataTypes.STRING, allowNull: false },
+      description: { type: DataTypes.STRING, allowNull: true, defaultValue:'' },
+      importance: { type: DataTypes.BOOLEAN, allowNull: true, defaultValue: false },
     },
-    { freezeTableName: true, timestamps: false }
+    {
+      freezeTableName: true,
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
+    }
   );
   return Group;
 };

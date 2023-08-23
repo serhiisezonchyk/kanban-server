@@ -1,8 +1,10 @@
+import category from '../models/category.js';
 import db from '../models/index.js';
-import { getGroupOwner } from './groupController.js';
+import { getGroupOwner } from './group.controller.js';
 
 const Task = db.task;
 const Category = db.category;
+const Group = db.group;
 export const create = async (req, res) => {
   const task = {
     title: req.body.title,
@@ -47,9 +49,7 @@ export const destroy = async (req, res) => {
   await Task.destroy({ where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Policy was deleted successfully!',
-        });
+        res.status(200).send({id});
       } else {
         res.status(401).send({
           message: `Cannot delete task with id=${id}. Maybe task was not found!`,
@@ -67,6 +67,10 @@ export const getOne = async (req, res) => {
   const { id } = req.params;
   await Task.findOne({
     where: { id },
+    include:{
+      model:Category,
+      include:Group
+    },
   })
     .then((data) => {
       res.status(200).send(data);
@@ -80,19 +84,10 @@ export const getOne = async (req, res) => {
 
 export const edit = async (req, res) => {
   const id = req.params.id;
-  const task = {
-    title: req.body.title,
-    description: req.body.description,
-    deadline_date: req.body.deadline_date,
-    importance: req.body.importance,
-    category_id: req.body.category_id,
-  };
-  await Task.update(policy, { where: { id: id } })
+  await Task.update(req.body, { where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Task was updated successfully!',
-        });
+        res.status(200).send({body:req.body, id:id});
       } else {
         res.status(401).send({
           message: `Cannot update task with id=${id}. Maybe task was not found!`,
@@ -106,10 +101,9 @@ export const edit = async (req, res) => {
     });
 };
 
-export const getTaskOwner = async(id)=>{
+export const getTaskOwner = async (id) => {
   const task = await Task.findByPk(id);
   const category = await Category.findByPk(task.category_id);
-  const user_id = await getGroupOwner(category.group_id)
-  console.log(user_id)
+  const user_id = await getGroupOwner(category.group_id);
   return user_id;
-}
+};

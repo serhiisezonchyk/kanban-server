@@ -2,8 +2,10 @@ import db from '../models/index.js';
 const Group = db.group;
 export const create = async (req, res) => {
   const group = {
-    label: req.body.label,
+    lable: req.body.lable,
     user_id: req.body.user_id,
+    importance: req.body.importance,
+    description:req.body.description,
   };
 
   await Group.create(group)
@@ -17,7 +19,7 @@ export const create = async (req, res) => {
 };
 
 export const getAll = async (req, res) => {
-  const { user_id } = req.query;
+  const user_id  = req.user_id;
   await Group.findAll({
     where: [{ user_id: user_id }],
   })
@@ -36,9 +38,7 @@ export const destroy = async (req, res) => {
   await Group.destroy({ where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Group was deleted successfully!',
-        });
+        res.status(200).send({id});
       } else {
         res.status(401).send({
           message: `Cannot delete group with id=${id}. Maybe group was not found!`,
@@ -69,15 +69,11 @@ export const getOne = async (req, res) => {
 
 export const edit = async (req, res) => {
   const id = req.params.id;
-  const group = {
-    label: req.body.label,
-  };
-  await Group.update(group, { where: { id: id } })
+
+  await Group.update(req.body, { where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Group was updated successfully!',
-        });
+        res.status(200).send({body:req.body, id:id});
       } else {
         res.status(401).send({
           message: `Cannot update Group with id=${id}. Maybe Group was not found!`,

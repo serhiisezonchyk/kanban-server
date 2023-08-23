@@ -1,10 +1,10 @@
 import db from '../models/index.js';
-import { getGroupOwner } from './groupController.js';
+import { getGroupOwner } from './group.controller.js';
 
 const Category = db.category;
 export const create = async (req, res) => {
   const category = {
-    label: req.body.label,
+    lable: req.body.lable,
     group_id: req.body.group_id,
   };
   await Category.create(category)
@@ -37,9 +37,7 @@ export const destroy = async (req, res) => {
   await Category.destroy({ where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Category was deleted successfully!',
-        });
+        res.status(200).send({id});
       } else {
         res.status(401).send({
           message: `Cannot delete Category with id=${id}. Maybe Category was not found!`,
@@ -70,15 +68,10 @@ export const getOne = async (req, res) => {
 
 export const edit = async (req, res) => {
   const id = req.params.id;
-  const category = {
-    label: req.body.label,
-  };
-  await Category.update(category, { where: { id: id } })
+  await Category.update(req.body, { where: { id: id } })
     .then((num) => {
       if (num == 1) {
-        res.status(200).send({
-          message: 'Category was updated successfully!',
-        });
+        res.status(200).send({body:req.body, id:id});
       } else {
         res.status(401).send({
           message: `Cannot update Category with id=${id}. Maybe Category was not found!`,
@@ -95,8 +88,6 @@ export const edit = async (req, res) => {
 
 export const getCategoryOwner = async(id)=>{
   const category = await Category.findByPk(id);
-  console.log(category.group_id)
   const user_id = await getGroupOwner(category.group_id)
-  console.log(user_id)
   return user_id;
 }

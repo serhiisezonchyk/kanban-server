@@ -4,24 +4,23 @@ import { compareSync, hash } from 'bcrypt';
 import db from '../models/index.js';
 
 const User = db.user;
-const generateJwt = (id, email, firstName, lastName) => {
-  return jwt.sign({ id, email, firstName, lastName }, process.env.SECRET_KEY, {
+const generateJwt = (id, email, first_name, last_name) => {
+  return jwt.sign({ id, email, first_name, last_name }, process.env.SECRET_KEY, {
     expiresIn: '24h',
   });
 };
 
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
-  console.log('req.body.email');
   const user = await User.findOne({
     where: { email },
   });
   if (!user) {
-    return next(ApiError.internal('Incorrect login or password.'));
+    return res.status(400).send({ message: 'Incorrect login or password.' });
   }
   let comparePassword = compareSync(password, user.password);
   if (!comparePassword)
-    return next(ApiError.internal('Incorrect login or password.'));
+    return res.status(400).send({ message: 'Incorrect login or password.' });
 
   const token = generateJwt(
     user.id,
@@ -29,24 +28,25 @@ export const login = async (req, res, next) => {
     user.first_name,
     user.last_name
   );
-  res.status(200).send({ token });
+  return res.status(200).send({ token });
 };
 
 export const check = async (req, res, next) => {
+  console.log(req.user)
   const token = generateJwt(
     req.user.id,
     req.user.email,
     req.user.first_name,
     req.user.last_name
   );
-  res.status(200).send({ token });
+  return res.status(200).send({ token });
 };
 
 export const create = async (req, res, next) => {
   console.log(req.body);
   await User.findOne({ where: { email: req.body.email } }).then((candidate) => {
     if (candidate) {
-      return next(ApiError.internal('THIS USER IS ALREADY EXIST.'));
+      return res.status(400).send({ message: 'This user is already exist.' });
     }
   });
   const newUser = {
@@ -64,15 +64,16 @@ export const create = async (req, res, next) => {
 
   await User.create(newUser)
     .then((data) => {
+      console.log(data)
       const token = generateJwt(
-        newUser.id,
-        newUser.email,
-        newUser.first_name,
-        newUser.last_name
+        data.id,
+        data.email,
+        data.first_name,
+        data.last_name
       );
-      res.status(200).send({ token });
+      return res.status(200).send({ token });
     })
     .catch((error) => {
-      next(ApiError.internal(error.message));
+      return res.status(400).send({ message: error.message });
     });
 };

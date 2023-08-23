@@ -1,5 +1,5 @@
 import Router from "express"
-import * as taskController from "../controllers/taskController.js"
+import * as taskController from "../controllers/task.controller.js"
 import handleValidationError from "../middlewares/handleValidationError.js";
 import checkTaskBody from '../middlewares/task/checkTaskBody.js';
 import checkTaskQuery from '../middlewares/task/checkTaskQuery.js';

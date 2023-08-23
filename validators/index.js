@@ -13,18 +13,17 @@ export const registerValidation = z.object({
 });
 
 export const groupValidation = z.object({
-  label: z.string({required_error: "Group name is required."}),
+  lable: z.string({required_error: "Group name is required."}).min(1,'Group name is required.'),
 });
 
 
 export const categoryValidation = z.object({
-  label: z.string({required_error:"Column name is required."})
+  lable: z.string({required_error:"Column name is required."})
 })
 
 export const taskValidation = z.object({
   title: z.string({required_error:"Title is required"}),
   description: z.string().optional(),
-  deadline_date: z.date().optional(),
   importance: z.boolean().optional(),
 });
 

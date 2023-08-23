@@ -1,5 +1,5 @@
 import Router from "express"
-import * as groupController from "../controllers/groupController.js"
+import * as groupController from "../controllers/group.controller.js"
 import handleValidationError from "../middlewares/handleValidationError.js";
 import checkGroupBody from '../middlewares/group/checkGroupBody.js';
 import checkGroupQuery from '../middlewares/group/checkGroupQuery.js';

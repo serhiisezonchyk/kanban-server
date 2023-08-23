@@ -1,4 +1,4 @@
-import  jwt  from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
 export default function (req, res, next) {
   if (req.method === 'OPTIONS') {
@@ -10,9 +10,10 @@ export default function (req, res, next) {
       return res.status(401).json({ message: 'No access' });
     }
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
-
-    if (decoded.id == req.body.user_id) next();
-    else res.status(401).json({ message: ' No access' });
+    if (decoded.id) {
+      req.body.user_id = decoded.id;
+      next();
+    } else res.status(401).json({ message: ' No access' });
   } catch (e) {
     res.status(401).json({ message: ' No access' });
   }

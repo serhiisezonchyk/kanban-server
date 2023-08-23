@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import { getGroupOwner } from '../../controllers/groupController.js';
+import { getGroupOwner } from '../../controllers/group.controller.js';
 
 export default function (req, res, next) {
   if (req.method === 'OPTIONS') {

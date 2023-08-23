@@ -1,9 +1,9 @@
 import Router from "express"
-import userRouter from "./userRouter.js"
-import groupRouter from "./groupRouter.js"
-import categoryRouter from "./categoryRouter.js"
-import taskRouter from "./taskRouter.js"
-import staticRouter from "./staticRouter.js"
+import userRouter from "./user.router.js"
+import groupRouter from "./group.router.js"
+import categoryRouter from "./category.router.js"
+import taskRouter from "./task.router.js"
+import staticRouter from "./static.router.js"
 
 const router = new Router();
 

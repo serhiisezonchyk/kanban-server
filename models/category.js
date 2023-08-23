@@ -7,7 +7,7 @@ export default (sequelize, DataTypes) => {
           primaryKey: true,
           autoIncrement: true,
         },
-        label: { type: DataTypes.STRING, allowNull: false },
+        lable: { type: DataTypes.STRING, allowNull: false },
       },
       { freezeTableName: true, timestamps: false }
     );
