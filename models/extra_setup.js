@@ -13,4 +13,7 @@ export default function applyExtraSetup(db) {
     onDelete: 'CASCADE',
   });
   db.task.belongsTo(db.category, { foreignKey: 'category_id' });
+
+  db.user.hasOne(db.note, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+  db.note.belongsTo(db.user, { foreignKey: 'user_id' });
 }

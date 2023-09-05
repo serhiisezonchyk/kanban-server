@@ -2,12 +2,17 @@ import jwt from 'jsonwebtoken';
 import ApiError from '../error/ApiError.js';
 import { compareSync, hash } from 'bcrypt';
 import db from '../models/index.js';
+import { createNote } from './note.controller.js';
 
 const User = db.user;
 const generateJwt = (id, email, first_name, last_name) => {
-  return jwt.sign({ id, email, first_name, last_name }, process.env.SECRET_KEY, {
-    expiresIn: '24h',
-  });
+  return jwt.sign(
+    { id, email, first_name, last_name },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: '24h',
+    }
+  );
 };
 
 export const login = async (req, res, next) => {
@@ -32,7 +37,7 @@ export const login = async (req, res, next) => {
 };
 
 export const check = async (req, res, next) => {
-  console.log(req.user)
+  console.log(req.user);
   const token = generateJwt(
     req.user.id,
     req.user.email,
@@ -43,7 +48,6 @@ export const check = async (req, res, next) => {
 };
 
 export const create = async (req, res, next) => {
-  console.log(req.body);
   await User.findOne({ where: { email: req.body.email } }).then((candidate) => {
     if (candidate) {
       return res.status(400).send({ message: 'This user is already exist.' });
@@ -64,13 +68,14 @@ export const create = async (req, res, next) => {
 
   await User.create(newUser)
     .then((data) => {
-      console.log(data)
       const token = generateJwt(
         data.id,
         data.email,
         data.first_name,
         data.last_name
       );
+
+      createNote({ user_id: data.id });
       return res.status(200).send({ token });
     })
     .catch((error) => {
